@@ -1,5 +1,4 @@
-import socket
-import sys
+import socket, sys
 import datetime, time
 
 #dividing a packet into 'size' sized bytes
@@ -8,12 +7,6 @@ def packetmaker(str, size):
 
 
 def main():
-    #command-line argument for user defined packet loss injection
-    arg = sys.argv[1] if len(sys.argv) > 1 else '.'
-    if arg == "0":
-        print "Injecting 0 loss in the transmission."
-    elif arg > "0":
-        print "Injecting {} loss in the transmission".format(arg)
 
     host="localhost"
     port=12345
@@ -27,8 +20,6 @@ def main():
         seq+=1
     try:
         s = socket.socket(socket.AF_INET,socket.SOCK_DGRAM)
-        # Set timeout of one minute for socket operations
-        s.settimeout(60)
         s.connect((host, port))
         print "Server started at {}, port {}.".format(host,port)
         for pkt in packet:
