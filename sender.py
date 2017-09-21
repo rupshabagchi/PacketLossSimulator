@@ -11,21 +11,28 @@ def packetmaker(str, size):
 def calcLoss(percent,total_packets ):
         return math.ceil((percent/100.0)*total_packets)
 
+#FEC XOR encoding
+def fec_xor(packet1,packet2):
+    return "".join(chr(ord(a)^ord(b)) for a,b in zip(packet1,packet2))
+
 def main():
-    host="localhost"
-    port=12345
-    packet = [] #packet number
-    new_packet = [] #list after dropping some packets
+    host = "localhost"
+    port = 12345
+    initial_packet = [] # initial packet
+    injected_packet = [] #list after dropping some packets
+    xor_fec_packet = [] #list after adding xor of packets
     seq = 0 #sequence number
+
     try:
         with open("text.txt", "rt") as f:
             bytes = f.read()
 
+        #dividing the whole byte variable into smaller packets
         for pkt in packetmaker(bytes, 100):
-            pkt = (str(seq)+"->"+pkt+","+str(datetime.datetime.now()))
-            packet.append(pkt)
+            pkt = (str(seq)+"->"+pkt+"#"+str(datetime.datetime.now()))
+            initial_packet.append(pkt)
             #print sys.getsizeof(pkt)
-            seq+=1
+            seq += 1
 
         #user enters % loss in packet transmission
         percent = sys.argv[1] if len(sys.argv) > 1 else '0'
@@ -35,20 +42,52 @@ def main():
             print "Injecting {} percent loss in the transmission".format(percent)
         packets_tolose = calcLoss(int(percent),(seq+1))
         print "Number of packets to lose {}".format(packets_tolose)
-        new_packet = list(packet)
+
+        #dropping packets to inject loss
+        injected_packet = list(initial_packet)
         for i in range(int(packets_tolose)):
-            del new_packet[i]
+            del injected_packet[i]
 
         try:
             #socket connections and operations
             s = socket.socket(socket.AF_INET,socket.SOCK_DGRAM)
             s.connect((host, port))
             print "Server started at {}, port {}.".format(host,port)
+            print '-------------------------------------------'
 
-            for pkt in new_packet:
-                s.sendto(pkt,(host,port))
-                print "sent: Packet:{}" .format(pkt)
-                time.sleep(2)
+            #FEC selector: can be 'triple' or 'xor'. Default is xor
+            selection = sys.argv[2] if len(sys.argv) == 3 else 'xor'
+
+            #triple redundancy FEC
+            if selection == "triple":
+                print "Proceeding with triple redundancy FEC"
+                print '-------------------------------------------'
+                for pkt in injected_packet:
+                     for i in range (3):
+                         s.sendto(pkt,(host,port))
+                         print "sent: Packet:{}" .format(pkt)
+                     time.sleep(2)
+                print "All packets sent."
+
+            #XOR FEC
+            if selection == "xor":
+                print "Proceeding with XOR FEC"
+                print '-------------------------------------------'
+
+                #Calculating and preparing xor fec packet
+                xor_list = []
+                xor_fec_packet = list (initial_packet)
+                ind = 3
+                n = 0
+                while ind < len(xor_fec_packet):
+                    xor_fec_packet.insert(ind, xor_list[n])
+                    ind += 4
+                    n += 1
+
+
+
+
+
 
         except socket.error, e:
             print "Error creating socket {}".format(e)

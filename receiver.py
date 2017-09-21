@@ -1,5 +1,9 @@
 import socket, datetime
 
+#FEC XOR decoding
+def fec_xor(packet1,packet2):
+    return "".join(chr(ord(a)^ord(b)) for a,b in zip(packet1,packet2))
+
 def main():
 
     host="localhost"
@@ -17,8 +21,8 @@ def main():
         try:
             # Set timeout of one minute for socket operations
             # s.settimeout(60)
-            packet,address = s.recvfrom(800)
-            message_decoded = packet.split(',')
+            packet,address = s.recvfrom(1024)
+            message_decoded = packet.split('#')
             time_sent = datetime.datetime.strptime(message_decoded[1],"%Y-%m-%d %H:%M:%S.%f")
             print "packet {}, sent at Time: {}".format(message_decoded[0],time_sent)
             received_packet+=1
