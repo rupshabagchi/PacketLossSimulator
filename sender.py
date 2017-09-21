@@ -79,11 +79,16 @@ def main():
                 xor_fec_packet = list (initial_packet)
                 ind = 3
                 n = 0
+                for i in range(0, len(initial_packet), 2):
+                    xor_list.append(fec_xor(initial_packet[i],initial_packet[i+1]))
+
                 while ind < len(xor_fec_packet):
                     xor_fec_packet.insert(ind, xor_list[n])
                     ind += 4
                     n += 1
 
+                print "\n\n xor fec packet"
+                print xor_fec_packet
 
 
 
