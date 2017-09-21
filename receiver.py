@@ -1,14 +1,5 @@
-import socket, datetime, sys
+import socket, datetime
 
-#command-line argument for user defined packet loss injection
-def getarg():
-        arg = sys.argv[1] if len(sys.argv) > 1 else '.'
-        if arg == "0":
-            print "Injecting 0 percent loss in the transmission."
-        elif arg > "0":
-            print "Injecting {} percent loss in the transmission".format(arg)
-def calcLoss():
-        
 def main():
 
     host="localhost"
@@ -37,8 +28,10 @@ def main():
 
         #safe exit
         except KeyboardInterrupt:
-            print '\n\n\n Closing the socket'
-            s.close()
+            print '\n\n Closing the receiver socket\n'
+            print '-------------------------------------------'
+            break
+    s.close()
 
 
 if __name__ == "__main__":
