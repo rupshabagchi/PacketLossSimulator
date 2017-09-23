@@ -43,7 +43,7 @@ def main():
             s = socket.socket(socket.AF_INET,socket.SOCK_DGRAM)
             s.connect((host, port))
             print "Server started at {}, port {}.".format(host,port)
-            print '-------------------------------------------'
+            print '============================================'
 
             #user enters % loss in packet transmission
             percent = sys.argv[1] if len(sys.argv) > 1 else '0'
@@ -58,7 +58,7 @@ def main():
             #triple redundancy FEC
             if selection == "triple":
                 print "Proceeding with triple redundancy FEC"
-                print '-------------------------------------------'
+                print '============================================'
                 packets_tolose = calcLoss(int(percent),((seq+1)*3))
                 print "Number of packets to lose {}".format(packets_tolose)
                 x = 0
@@ -77,7 +77,7 @@ def main():
             #XOR FEC
             if selection == "xor":
                 print "Proceeding with XOR FEC"
-                print '-------------------------------------------'
+                print '============================================'
 
                 #Calculating and preparing xor fec packet
                 number_of_packets = math.ceil((seq+1)+((seq+1)/2.0))
@@ -115,7 +115,7 @@ def main():
     #safe exit
     except KeyboardInterrupt:
         print '\n\n Closing the sender socket\n'
-        print '-------------------------------------------'
+        print '============================================'
 
     s.close()
 

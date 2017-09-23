@@ -1,4 +1,5 @@
-import socket, datetime
+import socket
+import datetime
 
 #FEC XOR decoding
 def fec_xor(packet1,packet2):
@@ -49,7 +50,7 @@ def main():
         #safe exit
         except KeyboardInterrupt:
             print '\n\n Closing the receiver socket\n'
-            print '-------------------------------------------'
+            print '==========================================='
             break
     s.close()
 
