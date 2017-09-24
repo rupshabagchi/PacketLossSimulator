@@ -1,11 +1,11 @@
 ## To run:
-
-`$ python receiver.py  #on one terminal instance
+```
+$ python receiver.py  #on one terminal instance
 $ python sender.py <loss_injection> <fec_process> #on another terminal instance
 
 loss_injection : 0% to 100%, 0% by default
 fec_process: xor or triple, xor by default
-`
+```
 ## Details
 
 sender.py
@@ -44,7 +44,9 @@ Q.What was the overhead, i.e., how many additional bytes you needed to send	to g
 
 At the moment, I am sending 67 bytes of overhead in a 100 byte packet. The first 40 bytes are the header consisting of the sequence number, and identification bytes marking the end of header. The trailer consists of identification bytes marking the end of message, and timestamp. The overhead size was determined in the following method:
 
+```
 import sys, datetime
 sys.getsizeof(str(seq)+"->"+"#"+str(datetime.datetime.now()))
+```
 
 The timestamp was added to calculate the delay in receiving the packet from the sender. However, in this case it may not be necessary to have the timestamp, since the sequence number alone can be used to decode the message. So only 40 bytes should be enough to successfully decode the actual message on the receiver's side in this case.
