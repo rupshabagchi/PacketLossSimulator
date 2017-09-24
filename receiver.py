@@ -7,11 +7,13 @@ def fec_xor(packet1,packet2):
 
 def main():
 
-    host="localhost"
-    port=12345
+    host = "localhost"
+    port = 12344
     received_packet = 0
     message_sequence = '0'
     actual_message = ""
+
+    #socket operations
     try:
         s = socket.socket(socket.AF_INET,socket.SOCK_DGRAM)
         s.bind((host,port))
@@ -22,8 +24,8 @@ def main():
 
     while True:
         try:
-            # Set timeout of one minute for socket operations
-            # s.settimeout(60)
+            # Set a timeout of one minute for socket operations
+            s.settimeout(60)
             packet,address = s.recvfrom(1024)
             received_packet += 1
             actual_message_prev = actual_message
@@ -31,9 +33,6 @@ def main():
             message_received = packet.split('#')
             message_sequence = packet.split('->')[0]
             actual_message = message_received[0].split('->')[1]
-            print "actual message prev"+actual_message_prev
-            print "\n actual message"+actual_message
-            print "\n\n\n"
             time_sent = datetime.datetime.strptime(message_received[1],"%Y-%m-%d %H:%M:%S.%f")
             #detect redundant packets
             if (message_sequence == message_sequence_prev):
@@ -41,11 +40,11 @@ def main():
             else:
                 if (message_sequence == ""):
                     msg = fec_xor(actual_message_prev,actual_message)
-                    print msg
-                # print "packet {}, sent at Time: {}".format(message_received[0],time_sent)
-                # #Time delay in receiving packet transmission
-                # delay = datetime.datetime.now()-time_sent
-                # print "reception delay in seconds= {}".format(delay.total_seconds())
+                    print "packet {}, sent at Time: {}".format(msg,time_sent)
+                else:
+                    print "packet {}, sent at Time: {}".format(message_received[0],time_sent)
+                #Time delay in receiving packet transmission
+                delay = datetime.datetime.now()-time_sent
 
         #safe exit
         except KeyboardInterrupt:

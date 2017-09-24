@@ -17,7 +17,7 @@ def fec_xor(packet1,packet2):
 
 def main():
     host = "localhost"
-    port = 12345
+    port = 12344
     initial_packet = [] # initial packet
     xor_fec_packet = [] #list after adding xor of packets
     seq = 0 #sequence number
