@@ -8,7 +8,7 @@ fec_process: xor or triple, xor by default
 ```
 ## Details
 
-sender.py
+#### sender.py
 
 This file consists of four functions:
 * packetmaker: divides the entire message into 100 byte sized chunks
@@ -21,7 +21,7 @@ The program starts with reading the data from a file named 'text.txt' included i
 While running the sender program, the user enters a desired percentage of packet loss and the required FEC method. To inject loss in the transmission, the first n packets are dropped, where n is the number of packets based on the percentage entered by the user. The 'calcLoss' function considers the ceiling value of the decimal obtained while calculating the number of packets from the percentage.  
 In each FEC method, the remaining packets are sent to the receiver.
 
-receiver.py
+#### receiver.py
 
 This program receives packets from the sender and breaks the packet into three parts namely, sequence number, actual message and timestamp. It checks for duplicate sequence numbers and rejects retranmitted packets. It also detects the xor packets and decrypts the message using the 'fec_xor' function.
 
