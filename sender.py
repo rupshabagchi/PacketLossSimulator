@@ -70,7 +70,7 @@ def main():
                          else:
                             s.sendto(pkt,(host,port))
                             print "sent: Packet:{}" .format(pkt)
-                            # time.sleep(2)
+                            time.sleep(2)
 
                 print "All packets sent."
 
