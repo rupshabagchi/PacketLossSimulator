@@ -1,16 +1,14 @@
 ## To run:
 
-$ python receiver.py  #on one terminal instance
+`$ python receiver.py  #on one terminal instance
 $ python sender.py <loss_injection> <fec_process> #on another terminal instance
 
 loss_injection : 0% to 100%, 0% by default
 fec_process: xor or triple, xor by default
+`
+## Details
 
-### Details
-
-==========
 sender.py
-==========
 
 This file consists of four functions:
 * packetmaker: divides the entire message into 100 byte sized chunks
@@ -23,14 +21,12 @@ The program starts with reading the data from a file named 'text.txt' included i
 While running the sender program, the user enters a desired percentage of packet loss and the required FEC method. To inject loss in the transmission, the first n packets are dropped, where n is the number of packets based on the percentage entered by the user. The 'calcLoss' function considers the ceiling value of the decimal obtained while calculating the number of packets from the percentage.  
 In each FEC method, the remaining packets are sent to the receiver.
 
-============
 receiver.py
-============
 
 This program receives packets from the sender and breaks the packet into three parts namely, sequence number, actual message and timestamp. It checks for duplicate sequence numbers and rejects retranmitted packets. It also detects the xor packets and decrypts the message using the 'fec_xor' function.
 
 
-# Testing:
+### Testing:
 
 The program was tested in the following manner.
 
@@ -38,7 +34,7 @@ The program was tested in the following manner.
 * Random packets were dropped to see if they could be recovered from at the receiver's end. The randomization was done manually.
 
 
-# Answers to asked questions:
+### Answers to asked questions:
 
 Q. How does	increasing loss rate affect	the	success rate of decoding?
 
